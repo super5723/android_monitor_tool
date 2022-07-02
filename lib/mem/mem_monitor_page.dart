@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:core';
-import 'package:android_monitor_tool/mem/mem_chart_util.dart';
+import 'package:android_monitor_tool/mem/mem_chart_model.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import '../util.dart';
@@ -24,7 +25,7 @@ class _MemMonitorPage extends State<MemMonitorPage> {
   final String packageName = 'com.havefun.android';
   final int _shellInterval = 2000;
   late Timer _shellTimer;
-  List<MemoryInfo> _memInfoList = [];
+  final List<MemoryInfo> _memInfoList = [];
   LineChartData? _chartData;
   int _firstTimeMs = 0;
 
@@ -102,7 +103,7 @@ class _MemMonitorPage extends State<MemMonitorPage> {
   }
 
   _refreshCharData() {
-    _chartData = MemCharUtil.getLineCharData(_memInfoList);
+    _chartData = MemChartModel(_memInfoList).getLineCharData();
     setState(() {});
   }
 
