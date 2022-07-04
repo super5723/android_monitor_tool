@@ -141,12 +141,12 @@ class MemChartModel {
     return SideTitles(
       showTitles: true,
       reservedSize: 32,
-      interval: 0.5,
+      interval: 0.5 * _xMultiple,
       getTitlesWidget: (value, meta) {
-        var style = TextStyle(
-          color: const Color(0xff72719b),
+        var style = const TextStyle(
+          color: Color(0xff72719b),
           fontWeight: FontWeight.bold,
-          fontSize: 16.0 / _xMultiple,
+          fontSize: 16.0,
         );
         return SideTitleWidget(
           axisSide: meta.axisSide,
