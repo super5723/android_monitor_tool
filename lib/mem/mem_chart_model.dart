@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:android_monitor_tool/util.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'mem_info.dart';
@@ -6,24 +7,29 @@ import 'mem_info.dart';
 /// @Author wangyang
 /// @Description
 /// @Date 2022/6/30
+const Color totalSizeColor = Colors.redAccent;
+const Color nativeSizeColor = Colors.deepPurpleAccent;
+const Color javaSizeColor = Colors.greenAccent;
+const Color graphicSizeColor = Colors.orangeAccent;
+
 class MemChartModel {
-  static const Color totalSizeColor = Colors.redAccent;
-  static const Color nativeSizeColor = Colors.deepPurpleAccent;
-  static const Color javaSizeColor = Colors.greenAccent;
-  static const Color graphicSizeColor = Colors.orangeAccent;
-  final List<MemoryInfo> _memInfoList;
+  final List<MemoryInfo> memInfoList;
   late final int _xMultiple;
-  MemChartModel(this._memInfoList) {
-    _xMultiple = ((_memInfoList.last.time / (1.0 * 1000 * 60)) / 8.0).ceil();
+  MemChartModel(this.memInfoList) {
+    if (memInfoList.length > 1) {
+      _xMultiple = ((memInfoList.last.time / (1.0 * 1000 * 60)) / 8.0).ceil();
+    } else {
+      _xMultiple = 1;
+    }
   }
 
-  LineChartData getLineCharData() {
+  LineChartData getLineChartData() {
     return LineChartData(
       lineTouchData: _getLineTouchData(),
       gridData: _getGridData(),
       titlesData: _getTitlesData(),
       borderData: _getBorderData(),
-      lineBarsData: _getLineBarsData(_memInfoList),
+      lineBarsData: memInfoList.isEmpty ? null : _getLineBarsData(memInfoList),
       minX: 0.0,
       maxX: 8.0 * _xMultiple,
       minY: 0,
@@ -37,11 +43,11 @@ class MemChartModel {
     List<FlSpot> javaSizeSpotList = [];
     List<FlSpot> graphicSizeSpotList = [];
     for (var memInfo in memInfoList) {
-      double x = _getMemoryChartXValue(memInfo.time);
-      totalSizeSpotList.add(FlSpot(x, _getMemoryChartYValue(memInfo.totalSize)));
-      nativeSizeSpotList.add(FlSpot(x, _getMemoryChartYValue(memInfo.nativeHeapSize)));
-      javaSizeSpotList.add(FlSpot(x, _getMemoryChartYValue(memInfo.javaHeapSize)));
-      graphicSizeSpotList.add(FlSpot(x, _getMemoryChartYValue(memInfo.graphicSize)));
+      double x = Util.getMemoryChartXValue(memInfo.time);
+      totalSizeSpotList.add(FlSpot(x, Util.getMemoryChartYValue(memInfo.totalSize)));
+      nativeSizeSpotList.add(FlSpot(x, Util.getMemoryChartYValue(memInfo.nativeHeapSize)));
+      javaSizeSpotList.add(FlSpot(x, Util.getMemoryChartYValue(memInfo.javaHeapSize)));
+      graphicSizeSpotList.add(FlSpot(x, Util.getMemoryChartYValue(memInfo.graphicSize)));
     }
     return [
       _getLineChartBarData(totalSizeColor, totalSizeSpotList),
@@ -49,18 +55,6 @@ class MemChartModel {
       _getLineChartBarData(javaSizeColor, javaSizeSpotList),
       _getLineChartBarData(nativeSizeColor, nativeSizeSpotList),
     ];
-  }
-
-  ///y轴以GB为单位
-  double _getMemoryChartYValue(int kb) {
-    String gb = (kb / 1024.0 / 1024.0).toStringAsFixed(3);
-    return double.parse(gb);
-  }
-
-  ///x轴以分为单位
-  double _getMemoryChartXValue(int timeMs) {
-    String minute = (timeMs / 1000.0 / 60.0).toStringAsFixed(2);
-    return double.parse(minute);
   }
 
   ///每条折线的配置
@@ -82,6 +76,7 @@ class MemChartModel {
         handleBuiltInTouches: true,
         touchTooltipData: LineTouchTooltipData(
           tooltipBgColor: Colors.blueGrey.withOpacity(0.8),
+          maxContentWidth: 130,
           getTooltipItems: (touchedSpots) {
             return touchedSpots.map((LineBarSpot touchedSpot) {
               final textStyle = TextStyle(
@@ -152,7 +147,7 @@ class MemChartModel {
           axisSide: meta.axisSide,
           space: 10,
           angle: pi / 2,
-          child: Text('$value', style: style),
+          child: Text(value == 0 ? '' : '$value', style: style),
         );
       },
     );
@@ -167,7 +162,7 @@ class MemChartModel {
           fontWeight: FontWeight.bold,
           fontSize: 14,
         );
-        return Text('$value', style: style, textAlign: TextAlign.center);
+        return Text(value == 0 ? '' : '$value', style: style, textAlign: TextAlign.center);
       },
       showTitles: true,
       interval: 0.25,

@@ -1,5 +1,5 @@
 /// @Author wangyang
-/// @Description 
+/// @Description
 /// @Date 2022/6/30
 class MemoryInfo {
   int javaHeapSize; //KB

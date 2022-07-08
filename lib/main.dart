@@ -1,6 +1,8 @@
+import 'package:android_monitor_tool/cpu/cpu_info_page.dart';
+import 'package:android_monitor_tool/mem/mem_info_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'mem/mem_monitor_page.dart';
+import 'package:macos_ui/macos_ui.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,51 +11,56 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'android monitor',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'android monitor tools'),
+    return MacosApp(
+      theme: MacosThemeData.light(),
+      darkTheme: MacosThemeData.dark(),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-  final String title;
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
+  int _pageIndex = 0;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+    return MacosWindow(
+      sidebar: Sidebar(
+        minWidth: 200,
+        builder: (context, scrollController) {
+          return SidebarItems(
+            currentIndex: _pageIndex,
+            onChanged: (index) {
+              setState(() => _pageIndex = index);
+            },
+            items: const [
+              SidebarItem(
+                leading: MacosIcon(CupertinoIcons.graph_square),
+                label: Text('Memory'),
+              ),
+              SidebarItem(
+                leading: MacosIcon(CupertinoIcons.graph_circle),
+                label: Text('CPU'),
+              ),
+            ],
+          );
+        },
       ),
-      body: Center(
-        child: Column(mainAxisSize: MainAxisSize.min,
-          children: [
-            GestureDetector(
-              child: Container(color: Colors.redAccent,
-              padding: EdgeInsetsDirectional.only(start: 10,top: 7,end: 10,bottom: 7),
-              child: Text('mem monitor'),),
-              onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context){
-                  return const MemMonitorPage();
-                }));
-              },
-            ),
-          ],),
-
-      ),//
+      child: IndexedStack(
+        index: _pageIndex,
+        children: const [
+          MemInfoPage(),
+          CpuInfoPage(),
+        ],
+      ),
     );
   }
 }
