@@ -18,16 +18,12 @@ class ShellCommand {
           processResult.stderr is String &&
           (processResult.stderr as String).isNotEmpty) {
         success = false;
-        errorMsg = processResult.stderr;
+        errorMsg = ((processResult.stderr) as String).trim();
       } else if (processResult.stdout != null &&
           processResult.stdout is String &&
           (processResult.stdout as String).isNotEmpty) {
         success = true;
-        if (processResult.stdout is String) {
-          result = processResult.stdout;
-        } else {
-          result = processResult.stdout.toString();
-        }
+        result = ((processResult.stdout) as String).trim();
       }
     } catch (e) {
       success = false;
