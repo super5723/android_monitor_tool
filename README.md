@@ -1,16 +1,5 @@
 # android_monitor_tool
 
-android monitor tool ,run on macos
+android monitor tool ,run on macos.
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img width="903" alt="iShot_2022-07-09_21 42 52" src="https://user-images.githubusercontent.com/5234441/178108456-2f1476c7-b894-4a0b-8389-26c0824853cf.png">
