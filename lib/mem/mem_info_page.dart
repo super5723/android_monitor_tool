@@ -384,13 +384,17 @@ class _MemInfoPageState extends State<MemInfoPage> {
     if (selectedDirectory != null) {
       File file =
           File(Path.join(selectedDirectory, Util.getMemExportFileName()));
-      // print('string=${ jsonEncode(_memInfoList)}');
-      _statusText = S.current.status_exporting(file);
-      _refreshUi();
       String content = jsonEncode(_memInfoList);
-      await file.writeAsString(content);
-      _statusText = S.current.status_exporting_success(file);
-      _refreshUi();
+      try {
+        await file.writeAsString(content);
+        await Util.showConfirmDialog(
+            context: context,
+            message: S.current.exporting_success(file));
+      } catch (e) {
+        await Util.showConfirmDialog(
+            context: context,
+            message: S.current.exporting_fail(e));
+      }
     }
   }
 

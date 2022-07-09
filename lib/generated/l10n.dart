@@ -270,23 +270,23 @@ class S {
     );
   }
 
-  /// `exporting file:{file}`
-  String status_exporting(Object file) {
+  /// `export success:{file}`
+  String exporting_success(Object file) {
     return Intl.message(
-      'exporting file:$file',
-      name: 'status_exporting',
+      'export success:$file',
+      name: 'exporting_success',
       desc: '',
       args: [file],
     );
   }
 
-  /// `export success:{file}`
-  String status_exporting_success(Object file) {
+  /// `export fail:{msg}`
+  String exporting_fail(Object msg) {
     return Intl.message(
-      'export success:$file',
-      name: 'status_exporting_success',
+      'export fail:$msg',
+      name: 'exporting_fail',
       desc: '',
-      args: [file],
+      args: [msg],
     );
   }
 

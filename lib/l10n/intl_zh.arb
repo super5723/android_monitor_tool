@@ -22,7 +22,7 @@
   "hint_input_interval": "请输入毫秒时间,必须超过1000",
   "input_interval_not_valid": "时间输入错误,必须超过1000",
   "status_error_process_name_empty": "进程名为空",
-  "status_exporting": "导出文件中:{file}",
-  "status_exporting_success": "导出成功:{file}",
+  "exporting_success": "导出成功:{file}",
+  "exporting_fail": "导出失败:{msg}",
   "success": "成功"
 }

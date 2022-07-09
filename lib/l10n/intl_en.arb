@@ -22,7 +22,7 @@
   "hint_input_interval": "input interval,must greater than 1000",
   "input_interval_not_valid": "interval not valid,must greater than 1000",
   "status_error_process_name_empty": "process is empty",
-  "status_exporting": "exporting file:{file}",
-  "status_exporting_success": "export success:{file}",
+  "exporting_success": "export success:{file}",
+  "exporting_fail": "export fail:{msg}",
   "success": "success"
 }

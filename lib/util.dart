@@ -95,10 +95,16 @@ class Util {
                       const SizedBox(
                         height: 20,
                       ),
-                      Text(
-                        message,
-                        textAlign: TextAlign.center,
-                        style: MacosTheme.of(context).typography.headline,
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          minWidth: 100,
+                          maxWidth: 300,
+                        ),
+                        child: Text(
+                          message,
+                          textAlign: TextAlign.center,
+                          style: MacosTheme.of(context).typography.headline,
+                        ),
                       ),
                       const SizedBox(
                         height: 30,
@@ -168,7 +174,7 @@ class Util {
                       ),
                       PushButton(
                         buttonSize: ButtonSize.small,
-                        child:  Text(S.current.submit),
+                        child: Text(S.current.submit),
                         onPressed: () {
                           Navigator.pop(context);
                           valueCallBack.call(controller.text);
