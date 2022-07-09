@@ -1,11 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
-
 import 'package:android_monitor_tool/shell.dart';
 import 'package:android_monitor_tool/util.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:macos_ui/macos_ui.dart';
+import 'package:path/path.dart' as Path;
 import 'mem_chart_model.dart';
 import 'mem_info.dart';
 
@@ -152,7 +155,8 @@ class _MemInfoPageState extends State<MemInfoPage> {
         try {
           int interval = int.parse(value);
           if (interval < 1000) {
-            Util.showConfirmDialog(context: context, message: 'interval must greater than 1000');
+            Util.showConfirmDialog(
+                context: context, message: 'interval must greater than 1000');
           } else {
             _commandIntervalMs = interval;
             if (_commandTimer?.isActive ?? false) {
@@ -162,7 +166,8 @@ class _MemInfoPageState extends State<MemInfoPage> {
             }
           }
         } catch (e) {
-          Util.showConfirmDialog(context: context, message: 'interval must be type of int');
+          Util.showConfirmDialog(
+              context: context, message: 'interval must be type of int');
         }
       });
     });
@@ -183,7 +188,8 @@ class _MemInfoPageState extends State<MemInfoPage> {
     }
 
     _commandTimer?.cancel();
-    _commandTimer = Timer.periodic(Duration(milliseconds: _commandIntervalMs), (timer) {
+    _commandTimer =
+        Timer.periodic(Duration(milliseconds: _commandIntervalMs), (timer) {
       _requestMemInfo();
     });
     _isRunning = true;
@@ -264,7 +270,8 @@ class _MemInfoPageState extends State<MemInfoPage> {
       if (_firstTimeMs == 0) {
         _firstTimeMs = curTime;
       }
-      return MemoryInfo(javaHeapSize, nativeHeapSize, graphicSize, totalSize, curTime - _firstTimeMs);
+      return MemoryInfo(javaHeapSize, nativeHeapSize, graphicSize, totalSize,
+          curTime - _firstTimeMs);
     }
 
     return null;
@@ -272,11 +279,7 @@ class _MemInfoPageState extends State<MemInfoPage> {
 
   _getWrapStatusText(String text) {
     DateTime now = DateTime.now();
-    String h = Util.twoDigits(now.hour);
-    String min = Util.twoDigits(now.minute);
-    String sec = Util.twoDigits(now.second);
-    String ms = Util.threeDigits(now.millisecond);
-    return "$h:$min:$sec.$ms : $text";
+    return '${now.year}-${Util.twoDigits(now.month)}-${Util.twoDigits(now.day)} ${Util.twoDigits(now.hour)}-${Util.twoDigits(now.minute)}-${Util.twoDigits(now.second)}: $text';
   }
 
   _getCurrentMemInfoWidget() {
@@ -288,20 +291,21 @@ class _MemInfoPageState extends State<MemInfoPage> {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        MemSizeWidget(text: Util.getMemoryChartYValue(currentMemInfo.totalSize).toString(), color: totalSizeColor),
+        MemSizeWidget(size: currentMemInfo.totalSize, color: totalSizeColor),
         const SizedBox(
           width: 20,
         ),
         MemSizeWidget(
-            text: Util.getMemoryChartYValue(currentMemInfo.nativeHeapSize).toString(), color: nativeSizeColor),
+            size: currentMemInfo.nativeHeapSize, color: nativeSizeColor),
         const SizedBox(
           width: 20,
         ),
-        MemSizeWidget(text: Util.getMemoryChartYValue(currentMemInfo.javaHeapSize).toString(), color: javaSizeColor),
+        MemSizeWidget(size: currentMemInfo.javaHeapSize, color: javaSizeColor),
         const SizedBox(
           width: 20,
         ),
-        MemSizeWidget(text: Util.getMemoryChartYValue(currentMemInfo.graphicSize).toString(), color: graphicSizeColor),
+        MemSizeWidget(
+            size: currentMemInfo.graphicSize, color: graphicSizeColor),
       ],
     );
   }
@@ -313,15 +317,15 @@ class _MemInfoPageState extends State<MemInfoPage> {
       children: const [
         MemColorTipWidget(text: 'total', color: totalSizeColor),
         SizedBox(
-          width: 10,
+          width: 15,
         ),
         MemColorTipWidget(text: 'native', color: nativeSizeColor),
         SizedBox(
-          width: 10,
+          width: 15,
         ),
         MemColorTipWidget(text: 'java', color: javaSizeColor),
         SizedBox(
-          width: 10,
+          width: 15,
         ),
         MemColorTipWidget(text: 'graphic', color: graphicSizeColor),
       ],
@@ -330,7 +334,8 @@ class _MemInfoPageState extends State<MemInfoPage> {
 
   _onSetProcessName(String? processName) async {
     if (processName == null || processName.isEmpty) {
-      await Util.showConfirmDialog(context: context, message: 'processName invalid');
+      await Util.showConfirmDialog(
+          context: context, message: 'processName invalid');
     } else {
       if (_curProcessName != processName) {
         _memInfoList.clear();
@@ -340,22 +345,70 @@ class _MemInfoPageState extends State<MemInfoPage> {
     }
   }
 
-  _importFile() async {}
+  _importFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
 
-  _exportFile() async {}
+    if (result != null && result.files.single.path != null) {
+      String? path = result.files.single.path;
+      if (path != null) {
+        List<MemoryInfo> memInfoList = [];
+        File file = File(path);
+        try {
+          String content = await file.readAsString();
+          List? result = jsonDecode(content);
+          if (result != null && result.isNotEmpty) {
+            for (var element in result) {
+              MemoryInfo memoryInfo = MemoryInfo.fromJson(element);
+              memInfoList.add(memoryInfo);
+            }
+          }
+          if (memInfoList.isNotEmpty) {
+            Util.showMemChartDialog(context: context, memInfoList: memInfoList);
+          }
+        } catch (e) {
+          _statusText = '$e';
+          _refreshUi();
+        }
+      }
+    }
+  }
+
+  _exportFile() async {
+    String? selectedDirectory = await FilePicker.platform
+        .getDirectoryPath(dialogTitle: 'select a directory');
+    // print('selectedDirector-->$selectedDirectory');
+    if (selectedDirectory != null) {
+      File file =
+          File(Path.join(selectedDirectory, Util.getMemExportFileName()));
+      // print('string=${ jsonEncode(_memInfoList)}');
+      _statusText = 'exporting $file';
+      _refreshUi();
+      String content = jsonEncode(_memInfoList);
+      await file.writeAsString(content);
+      _statusText = 'export success:$file';
+      _refreshUi();
+    }
+  }
 
   _refreshUi() {
     if (mounted) {
       setState(() {});
     }
   }
+
+  @override
+  void dispose() {
+    _commandTimer?.cancel();
+    super.dispose();
+  }
 }
 
 class MemSizeWidget extends StatelessWidget {
-  final String text;
+  final int size;
   final Color color;
 
-  const MemSizeWidget({Key? key, required this.text, required this.color}) : super(key: key);
+  const MemSizeWidget({Key? key, required this.size, required this.color})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -369,7 +422,7 @@ class MemSizeWidget extends StatelessWidget {
         const SizedBox(
           width: 5,
         ),
-        Text('${text}GB'),
+        Text('${(size / 1024.0).round()}MB'),
       ],
     );
   }
@@ -379,7 +432,8 @@ class MemColorTipWidget extends StatelessWidget {
   final String text;
   final Color color;
 
-  const MemColorTipWidget({Key? key, required this.text, required this.color}) : super(key: key);
+  const MemColorTipWidget({Key? key, required this.text, required this.color})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -393,7 +447,7 @@ class MemColorTipWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(
-          width: 10,
+          width: 5,
         ),
         Text(text),
       ],
@@ -419,7 +473,8 @@ class MemColorTypePainter extends CustomPainter {
         ),
         Offset(width, height / 2),
         paint);
-    canvas.drawCircle(Offset(width / 2, height / 2), min(width, height) / 4, paint);
+    canvas.drawCircle(
+        Offset(width / 2, height / 2), min(width, height) / 4, paint);
   }
 
   @override

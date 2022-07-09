@@ -1,6 +1,9 @@
 import 'package:android_monitor_tool/common_dialog.dart';
+import 'package:android_monitor_tool/mem/mem_chart_model.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
+import 'mem/mem_info.dart';
 
 /// @Author wangyang
 /// @Description
@@ -41,6 +44,33 @@ class Util {
     if (n >= 100) return "$n";
     if (n >= 10) return "0$n";
     return "00$n";
+  }
+
+  static String getMemExportFileName() {
+    DateTime now = DateTime.now();
+    return '${now.year}-${twoDigits(now.month)}-${twoDigits(now.day)} ${twoDigits(now.hour)}-${twoDigits(now.minute)}-${twoDigits(now.second)}.json';
+  }
+
+  static showMemChartDialog(
+      {required BuildContext context,
+      required List<MemoryInfo> memInfoList}) async {
+    LineChartData chartData = MemChartModel(memInfoList).getLineChartData();
+    await showDialog(
+        context: context,
+        builder: (_) {
+          return CommonDialog(
+            content: Builder(
+              builder: (_) {
+                return Container(
+                  width: 600,
+                  height: 400,
+                  padding: const EdgeInsetsDirectional.all(35),
+                  child: LineChart(chartData),
+                );
+              },
+            ),
+          );
+        });
   }
 
   static showConfirmDialog(
@@ -107,7 +137,8 @@ class Util {
         });
   }
 
-  static showInputDialog(BuildContext context, String hint, ValueChanged<String> valueCallBack) async {
+  static showInputDialog(BuildContext context, String hint,
+      ValueChanged<String> valueCallBack) async {
     await showDialog(
         context: context,
         builder: (_) {

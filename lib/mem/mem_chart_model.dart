@@ -8,7 +8,7 @@ import 'mem_info.dart';
 /// @Description
 /// @Date 2022/6/30
 const Color totalSizeColor = Colors.redAccent;
-const Color nativeSizeColor = Colors.deepPurpleAccent;
+const Color nativeSizeColor = Colors.purpleAccent;
 const Color javaSizeColor = Colors.greenAccent;
 const Color graphicSizeColor = Colors.orangeAccent;
 
@@ -44,10 +44,14 @@ class MemChartModel {
     List<FlSpot> graphicSizeSpotList = [];
     for (var memInfo in memInfoList) {
       double x = Util.getMemoryChartXValue(memInfo.time);
-      totalSizeSpotList.add(FlSpot(x, Util.getMemoryChartYValue(memInfo.totalSize)));
-      nativeSizeSpotList.add(FlSpot(x, Util.getMemoryChartYValue(memInfo.nativeHeapSize)));
-      javaSizeSpotList.add(FlSpot(x, Util.getMemoryChartYValue(memInfo.javaHeapSize)));
-      graphicSizeSpotList.add(FlSpot(x, Util.getMemoryChartYValue(memInfo.graphicSize)));
+      totalSizeSpotList
+          .add(FlSpot(x, Util.getMemoryChartYValue(memInfo.totalSize)));
+      nativeSizeSpotList
+          .add(FlSpot(x, Util.getMemoryChartYValue(memInfo.nativeHeapSize)));
+      javaSizeSpotList
+          .add(FlSpot(x, Util.getMemoryChartYValue(memInfo.javaHeapSize)));
+      graphicSizeSpotList
+          .add(FlSpot(x, Util.getMemoryChartYValue(memInfo.graphicSize)));
     }
     return [
       _getLineChartBarData(totalSizeColor, totalSizeSpotList),
@@ -80,12 +84,15 @@ class MemChartModel {
           getTooltipItems: (touchedSpots) {
             return touchedSpots.map((LineBarSpot touchedSpot) {
               final textStyle = TextStyle(
-                color: touchedSpot.bar.gradient?.colors.first ?? touchedSpot.bar.color ?? Colors.blueGrey,
+                color: touchedSpot.bar.gradient?.colors.first ??
+                    touchedSpot.bar.color ??
+                    Colors.blueGrey,
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
               );
               return LineTooltipItem(
-                  '${getLineChartBarDescByIndex(touchedSpot.barIndex)}:${touchedSpot.y * 1000}MB', textStyle);
+                  '${_getLineChartBarDescByIndex(touchedSpot.barIndex)}:${(touchedSpot.y * 1024.0).round()}MB',
+                  textStyle);
             }).toList();
           },
         ),
@@ -94,10 +101,12 @@ class MemChartModel {
             /// Indicator Line
             var lineColor = Colors.brown;
             const lineStrokeWidth = 2.0;
-            final flLine = FlLine(color: lineColor, strokeWidth: lineStrokeWidth);
+            final flLine =
+                FlLine(color: lineColor, strokeWidth: lineStrokeWidth);
             var dotSize = 3.0;
             final dotData = FlDotData(
-                getDotPainter: (spot, percent, bar, index) => FlDotCirclePainter(
+                getDotPainter: (spot, percent, bar, index) =>
+                    FlDotCirclePainter(
                       radius: dotSize,
                       color: bar.color,
                       strokeColor: Colors.white,
@@ -110,7 +119,11 @@ class MemChartModel {
 
   ///是否显示表格线
   FlGridData _getGridData() {
-    return FlGridData(show: true, drawVerticalLine: false, drawHorizontalLine: true, horizontalInterval: 0.25);
+    return FlGridData(
+        show: true,
+        drawVerticalLine: false,
+        drawHorizontalLine: true,
+        horizontalInterval: 0.25);
   }
 
   ///坐标轴标题配置
@@ -162,7 +175,8 @@ class MemChartModel {
           fontWeight: FontWeight.bold,
           fontSize: 14,
         );
-        return Text(value == 0 ? '' : '$value', style: style, textAlign: TextAlign.center);
+        return Text(value == 0 ? '' : '$value',
+            style: style, textAlign: TextAlign.center);
       },
       showTitles: true,
       interval: 0.25,
@@ -183,7 +197,7 @@ class MemChartModel {
     );
   }
 
-  getLineChartBarDescByIndex(int index) {
+  _getLineChartBarDescByIndex(int index) {
     if (index == 0) {
       return 'total';
     } else if (index == 1) {
