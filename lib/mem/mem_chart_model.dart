@@ -154,11 +154,11 @@ class MemChartModel {
         var style = const TextStyle(
           color: Color(0xff72719b),
           fontWeight: FontWeight.bold,
-          fontSize: 16.0,
+          fontSize: 12.0,
         );
         return SideTitleWidget(
           axisSide: meta.axisSide,
-          space: 10,
+          space: 12,
           angle: pi / 2,
           child: Text(value == 0 ? '' : '$value', style: style),
         );

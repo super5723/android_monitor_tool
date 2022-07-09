@@ -1,7 +1,9 @@
 import 'package:android_monitor_tool/cpu/cpu_info_page.dart';
+import 'package:android_monitor_tool/generated/l10n.dart';
 import 'package:android_monitor_tool/mem/mem_info_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:macos_ui/macos_ui.dart';
 
 void main() {
@@ -14,6 +16,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MacosApp(
+      localizationsDelegates: const [
+        S.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: S.delegate.supportedLocales,  //支持的国际化语言
+      locale: const Locale('zh',),                       //当前的语言
+      localeListResolutionCallback: (locales, supportedLocales) {
+        // print('当前系统语言环境$locales');
+        return;
+      },
       theme: MacosThemeData.light(),
       darkTheme: MacosThemeData.dark(),
       home: const MyHomePage(),
@@ -41,14 +55,14 @@ class _MyHomePageState extends State<MyHomePage> {
             onChanged: (index) {
               setState(() => _pageIndex = index);
             },
-            items: const [
+            items:  [
               SidebarItem(
-                leading: MacosIcon(CupertinoIcons.graph_square),
-                label: Text('Memory'),
+                leading: const MacosIcon(CupertinoIcons.graph_square),
+                label: Text(S.current.sidebar_name_memory),
               ),
               SidebarItem(
-                leading: MacosIcon(CupertinoIcons.graph_circle),
-                label: Text('CPU'),
+                leading: const MacosIcon(CupertinoIcons.graph_circle),
+                label: Text(S.current.sidebar_name_cpu),
               ),
             ],
           );

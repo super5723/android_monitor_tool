@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+import 'package:android_monitor_tool/generated/l10n.dart';
 import 'package:android_monitor_tool/shell.dart';
 import 'package:android_monitor_tool/util.dart';
 import 'package:file_picker/file_picker.dart';
@@ -26,11 +27,11 @@ class MemInfoPage extends StatefulWidget {
 
 class _MemInfoPageState extends State<MemInfoPage> {
   String? _curProcessName;
-  int _commandIntervalMs = 2000;
+  int _commandIntervalMs = 1500;
   Timer? _commandTimer;
   final List<MemoryInfo> _memInfoList = [];
   int _firstTimeMs = 0;
-  String _statusText = 'stopped';
+  String _statusText = S.current.stop;
   late LineChartData _chartData;
   bool _isRunning = false;
 
@@ -48,42 +49,42 @@ class _MemInfoPageState extends State<MemInfoPage> {
         titleWidth: 300,
         actions: [
           ToolBarIconButton(
-            label: 'control',
+            label: S.current.control,
             icon: MacosIcon(
               _isRunning ? CupertinoIcons.stop : CupertinoIcons.play,
             ),
-            tooltipMessage: _isRunning ? "stop" : "start",
+            tooltipMessage: _isRunning ? S.current.stop : S.current.start,
             onPressed: _switchRunning,
             showLabel: false,
           ),
           ToolBarPullDownButton(
-            label: "setting",
-            tooltipMessage: "setting",
+            label: S.current.setting,
+            tooltipMessage: S.current.setting,
             icon: CupertinoIcons.settings,
             items: [
               MacosPulldownMenuItem(
-                title: const Text("Set interval"),
+                title: Text(S.current.set_command_interval),
                 onTap: _inputCommandInterval,
               ),
               MacosPulldownMenuItem(
-                title: const Text("Set process"),
+                title: Text(S.current.set_process_name),
                 onTap: _inputProcessName,
               ),
             ],
           ),
           ToolBarPullDownButton(
-            label: "File",
+            label: S.current.file,
             icon: CupertinoIcons.doc,
-            tooltipMessage: "file",
+            tooltipMessage: S.current.file,
             items: [
               MacosPulldownMenuItem(
-                label: "import",
-                title: const Text("Import"),
+                label: S.current.import,
+                title: Text(S.current.import),
                 onTap: _importFile,
               ),
               MacosPulldownMenuItem(
-                label: "export",
-                title: const Text("Export"),
+                label: S.current.export,
+                title: Text(S.current.export),
                 onTap: _exportFile,
               ),
             ],
@@ -138,25 +139,27 @@ class _MemInfoPageState extends State<MemInfoPage> {
 
   _getTitle() {
     if (_curProcessName == null || _curProcessName!.isEmpty) {
-      return 'Memory Usage';
+      return S.current.memory_page_title_default;
     }
-    return 'Process :  $_curProcessName';
+    return S.current.memory_page_title_common(_curProcessName!);
   }
 
   _inputProcessName() {
-    Util.showInputDialog(context, 'input process name', (value) {
-      _onSetProcessName(value);
+    Future.delayed(const Duration(milliseconds: 10), () {
+      Util.showInputDialog(context, S.current.hint_input_process_name, (value) {
+        _onSetProcessName(value);
+      });
     });
   }
 
   _inputCommandInterval() {
     Future.delayed(const Duration(milliseconds: 10), () {
-      Util.showInputDialog(context, 'input interval', (value) {
+      Util.showInputDialog(context, S.current.hint_input_interval, (value) {
         try {
           int interval = int.parse(value);
           if (interval < 1000) {
             Util.showConfirmDialog(
-                context: context, message: 'interval must greater than 1000');
+                context: context, message: S.current.input_interval_not_valid);
           } else {
             _commandIntervalMs = interval;
             if (_commandTimer?.isActive ?? false) {
@@ -167,7 +170,7 @@ class _MemInfoPageState extends State<MemInfoPage> {
           }
         } catch (e) {
           Util.showConfirmDialog(
-              context: context, message: 'interval must be type of int');
+              context: context, message: S.current.input_interval_not_valid);
         }
       });
     });
@@ -198,14 +201,14 @@ class _MemInfoPageState extends State<MemInfoPage> {
 
   _stop() {
     _commandTimer?.cancel();
-    _statusText = 'stopped';
+    _statusText = S.current.stop;
     _isRunning = false;
     _refreshUi();
   }
 
   _requestMemInfo() async {
     if (_curProcessName == null || _curProcessName!.isEmpty) {
-      _statusText = 'run fail:processName is empty';
+      _statusText = S.current.status_error_process_name_empty;
       _refreshUi();
       return;
     }
@@ -225,7 +228,7 @@ class _MemInfoPageState extends State<MemInfoPage> {
     if (commandResult.success) {
       MemoryInfo? memInfo = _parseMemInfo(commandResult.result);
       if (memInfo != null) {
-        _statusText = 'success';
+        _statusText = S.current.success;
         _memInfoList.add(memInfo);
         _refreshChartData();
       } else {
@@ -335,7 +338,7 @@ class _MemInfoPageState extends State<MemInfoPage> {
   _onSetProcessName(String? processName) async {
     if (processName == null || processName.isEmpty) {
       await Util.showConfirmDialog(
-          context: context, message: 'processName invalid');
+          context: context, message: S.current.status_error_process_name_empty);
     } else {
       if (_curProcessName != processName) {
         _memInfoList.clear();
@@ -346,7 +349,8 @@ class _MemInfoPageState extends State<MemInfoPage> {
   }
 
   _importFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+    FilePickerResult? result = await FilePicker.platform
+        .pickFiles(dialogTitle: S.current.select_import_file);
 
     if (result != null && result.files.single.path != null) {
       String? path = result.files.single.path;
@@ -375,17 +379,17 @@ class _MemInfoPageState extends State<MemInfoPage> {
 
   _exportFile() async {
     String? selectedDirectory = await FilePicker.platform
-        .getDirectoryPath(dialogTitle: 'select a directory');
+        .getDirectoryPath(dialogTitle: S.current.select_export_path);
     // print('selectedDirector-->$selectedDirectory');
     if (selectedDirectory != null) {
       File file =
           File(Path.join(selectedDirectory, Util.getMemExportFileName()));
       // print('string=${ jsonEncode(_memInfoList)}');
-      _statusText = 'exporting $file';
+      _statusText = S.current.status_exporting(file);
       _refreshUi();
       String content = jsonEncode(_memInfoList);
       await file.writeAsString(content);
-      _statusText = 'export success:$file';
+      _statusText = S.current.status_exporting_success(file);
       _refreshUi();
     }
   }

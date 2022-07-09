@@ -1,4 +1,5 @@
 import 'package:android_monitor_tool/common_dialog.dart';
+import 'package:android_monitor_tool/generated/l10n.dart';
 import 'package:android_monitor_tool/mem/mem_chart_model.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -108,7 +109,7 @@ class Util {
                           if (cancelCallBack != null) ...[
                             PushButton(
                               buttonSize: ButtonSize.small,
-                              child: Text(cancelText ?? 'cancel'),
+                              child: Text(cancelText ?? S.current.cancel),
                               onPressed: () {
                                 Navigator.pop(context);
                                 cancelCallBack.call();
@@ -120,7 +121,7 @@ class Util {
                           ],
                           PushButton(
                             buttonSize: ButtonSize.small,
-                            child: Text(confirmText ?? 'confirm'),
+                            child: Text(confirmText ?? S.current.confirm),
                             onPressed: () {
                               Navigator.pop(context);
                               confirmCallBack?.call();
@@ -167,7 +168,7 @@ class Util {
                       ),
                       PushButton(
                         buttonSize: ButtonSize.small,
-                        child: const Text('submit'),
+                        child:  Text(S.current.submit),
                         onPressed: () {
                           Navigator.pop(context);
                           valueCallBack.call(controller.text);
