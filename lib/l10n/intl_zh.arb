@@ -24,5 +24,6 @@
   "status_error_process_name_empty": "进程名为空",
   "exporting_success": "导出成功:{file}",
   "exporting_fail": "导出失败:{msg}",
-  "success": "成功"
+  "success": "成功",
+  "clear":"清空数据"
 }

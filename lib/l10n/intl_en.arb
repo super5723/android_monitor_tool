@@ -9,7 +9,7 @@
   "stop": "Stop",
   "setting": "Setting",
   "set_command_interval": "Shell interval",
-  "set_process_name": "Process",
+  "set_process_name": "set Process",
   "file": "File",
   "import": "Import",
   "export": "Export",
@@ -24,5 +24,6 @@
   "status_error_process_name_empty": "process is empty",
   "exporting_success": "export success:{file}",
   "exporting_fail": "export fail:{msg}",
-  "success": "success"
+  "success": "success",
+  "clear":"clear data"
 }

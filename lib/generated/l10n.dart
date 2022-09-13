@@ -140,10 +140,10 @@ class S {
     );
   }
 
-  /// `Process`
+  /// `set Process`
   String get set_process_name {
     return Intl.message(
-      'Process',
+      'set Process',
       name: 'set_process_name',
       desc: '',
       args: [],
@@ -295,6 +295,16 @@ class S {
     return Intl.message(
       'success',
       name: 'success',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `clear data`
+  String get clear {
+    return Intl.message(
+      'clear data',
+      name: 'clear',
       desc: '',
       args: [],
     );

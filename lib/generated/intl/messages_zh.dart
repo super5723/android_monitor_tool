@@ -29,6 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
+        "clear": MessageLookupByLibrary.simpleMessage("清空数据"),
         "confirm": MessageLookupByLibrary.simpleMessage("确认"),
         "control": MessageLookupByLibrary.simpleMessage("控制"),
         "export": MessageLookupByLibrary.simpleMessage("导出"),

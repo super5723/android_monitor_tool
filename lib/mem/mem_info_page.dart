@@ -70,6 +70,10 @@ class _MemInfoPageState extends State<MemInfoPage> {
                 title: Text(S.current.set_process_name),
                 onTap: _inputProcessName,
               ),
+              MacosPulldownMenuItem(
+                title: Text(S.current.clear),
+                onTap: _clearChart,
+              ),
             ],
           ),
           ToolBarPullDownButton(
@@ -152,14 +156,20 @@ class _MemInfoPageState extends State<MemInfoPage> {
     });
   }
 
+  _clearChart() {
+    _memInfoList.clear();
+    _refreshChartData();
+    _firstTimeMs = 0;
+    _refreshUi();
+  }
+
   _inputCommandInterval() {
     Future.delayed(const Duration(milliseconds: 10), () {
       Util.showInputDialog(context, S.current.hint_input_interval, (value) {
         try {
           int interval = int.parse(value);
           if (interval < 1000) {
-            Util.showConfirmDialog(
-                context: context, message: S.current.input_interval_not_valid);
+            Util.showConfirmDialog(context: context, message: S.current.input_interval_not_valid);
           } else {
             _commandIntervalMs = interval;
             if (_commandTimer?.isActive ?? false) {
@@ -169,8 +179,7 @@ class _MemInfoPageState extends State<MemInfoPage> {
             }
           }
         } catch (e) {
-          Util.showConfirmDialog(
-              context: context, message: S.current.input_interval_not_valid);
+          Util.showConfirmDialog(context: context, message: S.current.input_interval_not_valid);
         }
       });
     });
@@ -191,8 +200,7 @@ class _MemInfoPageState extends State<MemInfoPage> {
     }
 
     _commandTimer?.cancel();
-    _commandTimer =
-        Timer.periodic(Duration(milliseconds: _commandIntervalMs), (timer) {
+    _commandTimer = Timer.periodic(Duration(milliseconds: _commandIntervalMs), (timer) {
       _requestMemInfo();
     });
     _isRunning = true;
@@ -273,8 +281,7 @@ class _MemInfoPageState extends State<MemInfoPage> {
       if (_firstTimeMs == 0) {
         _firstTimeMs = curTime;
       }
-      return MemoryInfo(javaHeapSize, nativeHeapSize, graphicSize, totalSize,
-          curTime - _firstTimeMs);
+      return MemoryInfo(javaHeapSize, nativeHeapSize, graphicSize, totalSize, curTime - _firstTimeMs);
     }
 
     return null;
@@ -298,8 +305,7 @@ class _MemInfoPageState extends State<MemInfoPage> {
         const SizedBox(
           width: 20,
         ),
-        MemSizeWidget(
-            size: currentMemInfo.nativeHeapSize, color: nativeSizeColor),
+        MemSizeWidget(size: currentMemInfo.nativeHeapSize, color: nativeSizeColor),
         const SizedBox(
           width: 20,
         ),
@@ -307,8 +313,7 @@ class _MemInfoPageState extends State<MemInfoPage> {
         const SizedBox(
           width: 20,
         ),
-        MemSizeWidget(
-            size: currentMemInfo.graphicSize, color: graphicSizeColor),
+        MemSizeWidget(size: currentMemInfo.graphicSize, color: graphicSizeColor),
       ],
     );
   }
@@ -337,8 +342,7 @@ class _MemInfoPageState extends State<MemInfoPage> {
 
   _onSetProcessName(String? processName) async {
     if (processName == null || processName.isEmpty) {
-      await Util.showConfirmDialog(
-          context: context, message: S.current.status_error_process_name_empty);
+      await Util.showConfirmDialog(context: context, message: S.current.status_error_process_name_empty);
     } else {
       if (_curProcessName != processName) {
         _memInfoList.clear();
@@ -349,8 +353,7 @@ class _MemInfoPageState extends State<MemInfoPage> {
   }
 
   _importFile() async {
-    FilePickerResult? result = await FilePicker.platform
-        .pickFiles(dialogTitle: S.current.select_import_file);
+    FilePickerResult? result = await FilePicker.platform.pickFiles(dialogTitle: S.current.select_import_file);
 
     if (result != null && result.files.single.path != null) {
       String? path = result.files.single.path;
@@ -378,22 +381,16 @@ class _MemInfoPageState extends State<MemInfoPage> {
   }
 
   _exportFile() async {
-    String? selectedDirectory = await FilePicker.platform
-        .getDirectoryPath(dialogTitle: S.current.select_export_path);
+    String? selectedDirectory = await FilePicker.platform.getDirectoryPath(dialogTitle: S.current.select_export_path);
     // print('selectedDirector-->$selectedDirectory');
     if (selectedDirectory != null) {
-      File file =
-          File(Path.join(selectedDirectory, Util.getMemExportFileName()));
+      File file = File(Path.join(selectedDirectory, Util.getMemExportFileName()));
       String content = jsonEncode(_memInfoList);
       try {
         await file.writeAsString(content);
-        await Util.showConfirmDialog(
-            context: context,
-            message: S.current.exporting_success(file));
+        await Util.showConfirmDialog(context: context, message: S.current.exporting_success(file));
       } catch (e) {
-        await Util.showConfirmDialog(
-            context: context,
-            message: S.current.exporting_fail(e));
+        await Util.showConfirmDialog(context: context, message: S.current.exporting_fail(e));
       }
     }
   }
@@ -415,8 +412,7 @@ class MemSizeWidget extends StatelessWidget {
   final int size;
   final Color color;
 
-  const MemSizeWidget({Key? key, required this.size, required this.color})
-      : super(key: key);
+  const MemSizeWidget({Key? key, required this.size, required this.color}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -440,8 +436,7 @@ class MemColorTipWidget extends StatelessWidget {
   final String text;
   final Color color;
 
-  const MemColorTipWidget({Key? key, required this.text, required this.color})
-      : super(key: key);
+  const MemColorTipWidget({Key? key, required this.text, required this.color}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -481,8 +476,7 @@ class MemColorTypePainter extends CustomPainter {
         ),
         Offset(width, height / 2),
         paint);
-    canvas.drawCircle(
-        Offset(width / 2, height / 2), min(width, height) / 4, paint);
+    canvas.drawCircle(Offset(width / 2, height / 2), min(width, height) / 4, paint);
   }
 
   @override

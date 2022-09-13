@@ -29,6 +29,7 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+        "clear": MessageLookupByLibrary.simpleMessage("clear data"),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "control": MessageLookupByLibrary.simpleMessage("Control"),
         "export": MessageLookupByLibrary.simpleMessage("Export"),
@@ -51,7 +52,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Select file"),
         "set_command_interval":
             MessageLookupByLibrary.simpleMessage("Shell interval"),
-        "set_process_name": MessageLookupByLibrary.simpleMessage("Process"),
+        "set_process_name": MessageLookupByLibrary.simpleMessage("set Process"),
         "setting": MessageLookupByLibrary.simpleMessage("Setting"),
         "sidebar_name_cpu": MessageLookupByLibrary.simpleMessage("CPU"),
         "sidebar_name_memory": MessageLookupByLibrary.simpleMessage("Memory"),
