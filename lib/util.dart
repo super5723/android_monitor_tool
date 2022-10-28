@@ -1,9 +1,11 @@
 import 'package:android_monitor_tool/common_dialog.dart';
+import 'package:android_monitor_tool/cpu/cpu_info.dart';
 import 'package:android_monitor_tool/generated/l10n.dart';
 import 'package:android_monitor_tool/mem/mem_chart_model.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:macos_ui/macos_ui.dart';
+import 'cpu/cpu_chart_model.dart';
 import 'mem/mem_info.dart';
 
 /// @Author wangyang
@@ -49,13 +51,40 @@ class Util {
 
   static String getMemExportFileName() {
     DateTime now = DateTime.now();
-    return '${now.year}-${twoDigits(now.month)}-${twoDigits(now.day)} ${twoDigits(now.hour)}-${twoDigits(now.minute)}-${twoDigits(now.second)}.json';
+    return 'mem-${now.year}-${twoDigits(now.month)}-${twoDigits(now.day)} ${twoDigits(now.hour)}-${twoDigits(now.minute)}-${twoDigits(now.second)}.json';
+  }
+
+  static String getCpuExportFileName() {
+    DateTime now = DateTime.now();
+    return 'cpu-${now.year}-${twoDigits(now.month)}-${twoDigits(now.day)} ${twoDigits(now.hour)}-${twoDigits(now.minute)}-${twoDigits(now.second)}.json';
   }
 
   static showMemChartDialog(
       {required BuildContext context,
       required List<MemoryInfo> memInfoList}) async {
     LineChartData chartData = MemChartModel(memInfoList).getLineChartData();
+    await showDialog(
+        context: context,
+        builder: (_) {
+          return CommonDialog(
+            content: Builder(
+              builder: (_) {
+                return Container(
+                  width: 600,
+                  height: 400,
+                  padding: const EdgeInsetsDirectional.all(35),
+                  child: LineChart(chartData),
+                );
+              },
+            ),
+          );
+        });
+  }
+
+  static showCpuChartDialog(
+      {required BuildContext context,
+        required List<CpuInfo> cpuInfoList}) async {
+    LineChartData chartData = CpuChartModel(cpuInfoList).getLineChartData();
     await showDialog(
         context: context,
         builder: (_) {

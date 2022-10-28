@@ -13,11 +13,9 @@ class MemoryInfo {
   int totalSize;
   int time;
 
-  MemoryInfo(this.javaHeapSize, this.nativeHeapSize, this.graphicSize,
-      this.totalSize, this.time);
+  MemoryInfo(this.javaHeapSize, this.nativeHeapSize, this.graphicSize, this.totalSize, this.time);
 
-  factory MemoryInfo.fromJson(Map<String, dynamic> json) =>
-      _$MemoryInfoFromJson(json);
+  factory MemoryInfo.fromJson(Map<String, dynamic> json) => _$MemoryInfoFromJson(json);
 
   Map<String, dynamic> toJson() => _$MemoryInfoToJson(this);
 

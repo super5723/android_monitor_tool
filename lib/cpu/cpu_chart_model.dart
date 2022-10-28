@@ -1,23 +1,20 @@
 import 'dart:math';
-import 'package:android_monitor_tool/util.dart';
+
+import 'package:android_monitor_tool/cpu/cpu_info.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'mem_info.dart';
+
+import '../util.dart';
 
 /// @Author wangyang
 /// @Description
-/// @Date 2022/6/30
-const Color totalSizeColor = Colors.redAccent;
-const Color nativeSizeColor = Colors.purpleAccent;
-const Color javaSizeColor = Colors.greenAccent;
-const Color graphicSizeColor = Colors.orangeAccent;
-
-class MemChartModel {
-  final List<MemoryInfo> memInfoList;
+/// @Date 2022/10/28
+class CpuChartModel {
+  final List<CpuInfo> cpuInfoList;
   late final int _xMultiple;
-  MemChartModel(this.memInfoList) {
-    if (memInfoList.length > 1) {
-      _xMultiple = ((memInfoList.last.time / (1.0 * 1000 * 60)) / 8.0).ceil();
+  CpuChartModel(this.cpuInfoList) {
+    if (cpuInfoList.length > 1) {
+      _xMultiple = ((cpuInfoList.last.time / (1.0 * 1000 * 60)) / 8.0).ceil();
     } else {
       _xMultiple = 1;
     }
@@ -29,45 +26,31 @@ class MemChartModel {
       gridData: _getGridData(),
       titlesData: _getTitlesData(),
       borderData: _getBorderData(),
-      lineBarsData: memInfoList.isEmpty ? null : _getLineBarsData(memInfoList),
+      lineBarsData: cpuInfoList.isEmpty ? null : _getLineBarsData(cpuInfoList),
       minX: 0.0,
       maxX: 8.0 * _xMultiple,
-      minY: 0,
-      maxY: 2.0,
+      minY: 0.0,
+      maxY: 100.0,
     );
   }
 
-  List<LineChartBarData> _getLineBarsData(List<MemoryInfo> memInfoList) {
-    List<FlSpot> totalSizeSpotList = [];
-    List<FlSpot> nativeSizeSpotList = [];
-    List<FlSpot> javaSizeSpotList = [];
-    List<FlSpot> graphicSizeSpotList = [];
-    for (var memInfo in memInfoList) {
-      double x = Util.getMemoryChartXValue(memInfo.time);
-      totalSizeSpotList.add(FlSpot(x, Util.getMemoryChartYValue(memInfo.totalSize)));
-      nativeSizeSpotList.add(FlSpot(x, Util.getMemoryChartYValue(memInfo.nativeHeapSize)));
-      javaSizeSpotList.add(FlSpot(x, Util.getMemoryChartYValue(memInfo.javaHeapSize)));
-      graphicSizeSpotList.add(FlSpot(x, Util.getMemoryChartYValue(memInfo.graphicSize)));
+  List<LineChartBarData> _getLineBarsData(List<CpuInfo> cpuInfoList) {
+    List<FlSpot> spotList = [];
+    for (var cpuInfo in cpuInfoList) {
+      double x = Util.getMemoryChartXValue(cpuInfo.time);
+      spotList.add(FlSpot(x, cpuInfo.usage));
     }
     return [
-      _getLineChartBarData(totalSizeColor, totalSizeSpotList),
-      _getLineChartBarData(graphicSizeColor, graphicSizeSpotList),
-      _getLineChartBarData(javaSizeColor, javaSizeSpotList),
-      _getLineChartBarData(nativeSizeColor, nativeSizeSpotList),
+      LineChartBarData(
+        isCurved: false,
+        color: Colors.redAccent,
+        barWidth: 2,
+        isStrokeCapRound: true,
+        dotData: FlDotData(show: false),
+        belowBarData: BarAreaData(show: true),
+        spots: spotList,
+      ),
     ];
-  }
-
-  ///每条折线的配置
-  LineChartBarData _getLineChartBarData(Color color, List<FlSpot> spots) {
-    return LineChartBarData(
-      isCurved: false,
-      color: color,
-      barWidth: 2,
-      isStrokeCapRound: true,
-      dotData: FlDotData(show: false),
-      belowBarData: BarAreaData(show: true),
-      spots: spots,
-    );
   }
 
   ///接触折线时，提示的样式
@@ -84,8 +67,7 @@ class MemChartModel {
                 fontWeight: FontWeight.bold,
                 fontSize: 14,
               );
-              return LineTooltipItem(
-                  '${_getLineChartBarDescByIndex(touchedSpot.barIndex)}:${(touchedSpot.y * 1024.0).round()}MB', textStyle);
+              return LineTooltipItem('${touchedSpot.y.round()}%', textStyle);
             }).toList();
           },
         ),
@@ -135,6 +117,23 @@ class MemChartModel {
     );
   }
 
+  ///y轴：cpu使用率
+  SideTitles _getLeftTitles() {
+    return SideTitles(
+      getTitlesWidget: (value, meta) {
+        const style = TextStyle(
+          color: Color(0xff75729e),
+          fontWeight: FontWeight.bold,
+          fontSize: 14,
+        );
+        return Text(value == 0 ? '' : '$value', style: style, textAlign: TextAlign.center);
+      },
+      showTitles: true,
+      interval: 20,
+      reservedSize: 40,
+    );
+  }
+
   ///x轴：时间
   SideTitles _getBottomTitles() {
     return SideTitles(
@@ -157,23 +156,6 @@ class MemChartModel {
     );
   }
 
-  ///y轴：GB
-  SideTitles _getLeftTitles() {
-    return SideTitles(
-      getTitlesWidget: (value, meta) {
-        const style = TextStyle(
-          color: Color(0xff75729e),
-          fontWeight: FontWeight.bold,
-          fontSize: 14,
-        );
-        return Text(value == 0 ? '' : '$value', style: style, textAlign: TextAlign.center);
-      },
-      showTitles: true,
-      interval: 0.25,
-      reservedSize: 40,
-    );
-  }
-
   ///只展示左边和下边的两条轴线
   FlBorderData _getBorderData() {
     return FlBorderData(
@@ -185,17 +167,5 @@ class MemChartModel {
         top: BorderSide(color: Colors.transparent),
       ),
     );
-  }
-
-  _getLineChartBarDescByIndex(int index) {
-    if (index == 0) {
-      return 'total';
-    } else if (index == 1) {
-      return 'graphic';
-    } else if (index == 2) {
-      return 'java';
-    } else {
-      return 'native';
-    }
   }
 }

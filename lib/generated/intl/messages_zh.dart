@@ -26,12 +26,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m2(process) => "进程名:${process}";
 
+  static String m3(usage) => "当前使用率:${usage}%";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "cancel": MessageLookupByLibrary.simpleMessage("取消"),
         "clear": MessageLookupByLibrary.simpleMessage("清空数据"),
         "confirm": MessageLookupByLibrary.simpleMessage("确认"),
         "control": MessageLookupByLibrary.simpleMessage("控制"),
+        "cpu_page_title": MessageLookupByLibrary.simpleMessage("Cpu使用率"),
         "export": MessageLookupByLibrary.simpleMessage("导出"),
         "exporting_fail": m0,
         "exporting_success": m1,
@@ -45,6 +48,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("时间输入错误,必须超过1000"),
         "memory_page_title_common": m2,
         "memory_page_title_default": MessageLookupByLibrary.simpleMessage("内存"),
+        "realtime_cpu_usage": m3,
         "select_export_path": MessageLookupByLibrary.simpleMessage("选择导出路径"),
         "select_import_file": MessageLookupByLibrary.simpleMessage("选择文件"),
         "set_command_interval":

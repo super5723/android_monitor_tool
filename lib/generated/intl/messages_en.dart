@@ -26,12 +26,15 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m2(process) => "Process:${process}";
 
+  static String m3(usage) => "current usage:${usage}%";
+
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "clear": MessageLookupByLibrary.simpleMessage("clear data"),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "control": MessageLookupByLibrary.simpleMessage("Control"),
+        "cpu_page_title": MessageLookupByLibrary.simpleMessage("Cpu Usage"),
         "export": MessageLookupByLibrary.simpleMessage("Export"),
         "exporting_fail": m0,
         "exporting_success": m1,
@@ -46,6 +49,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "memory_page_title_common": m2,
         "memory_page_title_default":
             MessageLookupByLibrary.simpleMessage("Memory Info"),
+        "realtime_cpu_usage": m3,
         "select_export_path":
             MessageLookupByLibrary.simpleMessage("Select path"),
         "select_import_file":

@@ -49,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return MacosWindow(
       sidebar: Sidebar(
         minWidth: 200,
+        topOffset: 10,
         builder: (context, scrollController) {
           return SidebarItems(
             currentIndex: _pageIndex,

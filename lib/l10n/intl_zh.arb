@@ -25,5 +25,7 @@
   "exporting_success": "导出成功:{file}",
   "exporting_fail": "导出失败:{msg}",
   "success": "成功",
-  "clear":"清空数据"
+  "clear":"清空数据",
+  "cpu_page_title": "Cpu使用率",
+  "realtime_cpu_usage": "当前使用率:{usage}%"
 }

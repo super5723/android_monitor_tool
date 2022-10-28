@@ -25,5 +25,7 @@
   "exporting_success": "export success:{file}",
   "exporting_fail": "export fail:{msg}",
   "success": "success",
-  "clear":"clear data"
+  "clear":"clear data",
+  "cpu_page_title": "Cpu Usage",
+  "realtime_cpu_usage": "current usage:{usage}%"
 }

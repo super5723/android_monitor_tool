@@ -14,8 +14,7 @@ MemoryInfo _$MemoryInfoFromJson(Map<String, dynamic> json) => MemoryInfo(
       json['time'] as int,
     );
 
-Map<String, dynamic> _$MemoryInfoToJson(MemoryInfo instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$MemoryInfoToJson(MemoryInfo instance) => <String, dynamic>{
       'javaHeapSize': instance.javaHeapSize,
       'nativeHeapSize': instance.nativeHeapSize,
       'graphicSize': instance.graphicSize,

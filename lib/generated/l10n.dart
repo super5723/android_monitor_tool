@@ -309,6 +309,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Cpu Usage`
+  String get cpu_page_title {
+    return Intl.message(
+      'Cpu Usage',
+      name: 'cpu_page_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `current usage:{usage}%`
+  String realtime_cpu_usage(Object usage) {
+    return Intl.message(
+      'current usage:$usage%',
+      name: 'realtime_cpu_usage',
+      desc: '',
+      args: [usage],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
