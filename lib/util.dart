@@ -196,6 +196,7 @@ class Util {
                           autofocus: true,
                           controller: controller,
                           placeholder: hint,
+                          clearButtonMode: OverlayVisibilityMode.always,
                         ),
                       ),
                       const SizedBox(

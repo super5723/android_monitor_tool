@@ -20,13 +20,13 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'zh';
 
-  static String m0(msg) => "导出失败:${msg}";
+  static String m0(usage) => "Cpu使用率:${usage}%";
 
-  static String m1(file) => "导出成功:${file}";
+  static String m1(msg) => "导出失败:${msg}";
 
-  static String m2(process) => "进程名:${process}";
+  static String m2(file) => "导出成功:${file}";
 
-  static String m3(usage) => "当前使用率:${usage}%";
+  static String m3(process) => "进程名:${process}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -34,10 +34,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "clear": MessageLookupByLibrary.simpleMessage("清空数据"),
         "confirm": MessageLookupByLibrary.simpleMessage("确认"),
         "control": MessageLookupByLibrary.simpleMessage("控制"),
-        "cpu_page_title": MessageLookupByLibrary.simpleMessage("Cpu使用率"),
+        "cpu_page_title": m0,
+        "cpu_page_title_default":
+            MessageLookupByLibrary.simpleMessage("Cpu使用率"),
         "export": MessageLookupByLibrary.simpleMessage("导出"),
-        "exporting_fail": m0,
-        "exporting_success": m1,
+        "exporting_fail": m1,
+        "exporting_success": m2,
         "file": MessageLookupByLibrary.simpleMessage("文件"),
         "hint_input_interval":
             MessageLookupByLibrary.simpleMessage("请输入毫秒时间,必须超过1000"),
@@ -46,9 +48,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "import": MessageLookupByLibrary.simpleMessage("导入"),
         "input_interval_not_valid":
             MessageLookupByLibrary.simpleMessage("时间输入错误,必须超过1000"),
-        "memory_page_title_common": m2,
-        "memory_page_title_default": MessageLookupByLibrary.simpleMessage("内存"),
-        "realtime_cpu_usage": m3,
+        "memory_page_title_common": m3,
+        "memory_page_title_default":
+            MessageLookupByLibrary.simpleMessage("请在设置中输入进程名"),
         "select_export_path": MessageLookupByLibrary.simpleMessage("选择导出路径"),
         "select_import_file": MessageLookupByLibrary.simpleMessage("选择文件"),
         "set_command_interval":

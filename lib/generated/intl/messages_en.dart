@@ -20,13 +20,13 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(msg) => "export fail:${msg}";
+  static String m0(usage) => "Cpu Usage:${usage}%";
 
-  static String m1(file) => "export success:${file}";
+  static String m1(msg) => "export fail:${msg}";
 
-  static String m2(process) => "Process:${process}";
+  static String m2(file) => "export success:${file}";
 
-  static String m3(usage) => "current usage:${usage}%";
+  static String m3(process) => "Process:${process}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -34,10 +34,12 @@ class MessageLookup extends MessageLookupByLibrary {
         "clear": MessageLookupByLibrary.simpleMessage("clear data"),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
         "control": MessageLookupByLibrary.simpleMessage("Control"),
-        "cpu_page_title": MessageLookupByLibrary.simpleMessage("Cpu Usage"),
+        "cpu_page_title": m0,
+        "cpu_page_title_default":
+            MessageLookupByLibrary.simpleMessage("Cpu Usage"),
         "export": MessageLookupByLibrary.simpleMessage("Export"),
-        "exporting_fail": m0,
-        "exporting_success": m1,
+        "exporting_fail": m1,
+        "exporting_success": m2,
         "file": MessageLookupByLibrary.simpleMessage("File"),
         "hint_input_interval": MessageLookupByLibrary.simpleMessage(
             "input interval,must greater than 1000"),
@@ -46,10 +48,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "import": MessageLookupByLibrary.simpleMessage("Import"),
         "input_interval_not_valid": MessageLookupByLibrary.simpleMessage(
             "interval not valid,must greater than 1000"),
-        "memory_page_title_common": m2,
-        "memory_page_title_default":
-            MessageLookupByLibrary.simpleMessage("Memory Info"),
-        "realtime_cpu_usage": m3,
+        "memory_page_title_common": m3,
+        "memory_page_title_default": MessageLookupByLibrary.simpleMessage(
+            "please input processName by setting"),
         "select_export_path":
             MessageLookupByLibrary.simpleMessage("Select path"),
         "select_import_file":

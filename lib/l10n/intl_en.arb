@@ -2,7 +2,7 @@
   "@@locale" : "en",
   "sidebar_name_memory": "Memory",
   "sidebar_name_cpu": "CPU",
-  "memory_page_title_default": "Memory Info",
+  "memory_page_title_default": "please input processName by setting",
   "memory_page_title_common": "Process:{process}",
   "control": "Control",
   "start": "Start",
@@ -26,6 +26,6 @@
   "exporting_fail": "export fail:{msg}",
   "success": "success",
   "clear":"clear data",
-  "cpu_page_title": "Cpu Usage",
-  "realtime_cpu_usage": "current usage:{usage}%"
+  "cpu_page_title_default": "Cpu Usage",
+  "cpu_page_title": "Cpu Usage:{usage}%"
 }

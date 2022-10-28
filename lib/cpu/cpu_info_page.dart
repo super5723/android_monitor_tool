@@ -48,7 +48,7 @@ class _CpuInfoPageState extends State<CpuInfoPage> {
   Widget build(BuildContext context) {
     return MacosScaffold(
       toolBar: ToolBar(
-        title: Text(S.current.cpu_page_title),
+        title: Text(_getTitle()),
         titleWidth: 300,
         actions: [
           ToolBarIconButton(
@@ -106,7 +106,6 @@ class _CpuInfoPageState extends State<CpuInfoPage> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      _getCurrentCpuInfoWidget(),
                       const SizedBox(
                         height: 20,
                       ),
@@ -137,12 +136,12 @@ class _CpuInfoPageState extends State<CpuInfoPage> {
     return '${now.year}-${Util.twoDigits(now.month)}-${Util.twoDigits(now.day)} ${Util.twoDigits(now.hour)}-${Util.twoDigits(now.minute)}-${Util.twoDigits(now.second)}: $text';
   }
 
-  _getCurrentCpuInfoWidget() {
+  _getTitle() {
     if (_cpuInfoList.isEmpty) {
-      return const SizedBox.shrink();
+      return S.current.cpu_page_title_default;
     }
     CpuInfo currentCpuInfo = _cpuInfoList.last;
-    return Text(S.current.realtime_cpu_usage(currentCpuInfo.usage.toInt()));
+    return S.current.cpu_page_title(currentCpuInfo.usage.toInt());
   }
 
   _clearChart() {

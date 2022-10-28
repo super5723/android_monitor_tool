@@ -70,10 +70,10 @@ class S {
     );
   }
 
-  /// `Memory Info`
+  /// `please input processName by setting`
   String get memory_page_title_default {
     return Intl.message(
-      'Memory Info',
+      'please input processName by setting',
       name: 'memory_page_title_default',
       desc: '',
       args: [],
@@ -311,20 +311,20 @@ class S {
   }
 
   /// `Cpu Usage`
-  String get cpu_page_title {
+  String get cpu_page_title_default {
     return Intl.message(
       'Cpu Usage',
-      name: 'cpu_page_title',
+      name: 'cpu_page_title_default',
       desc: '',
       args: [],
     );
   }
 
-  /// `current usage:{usage}%`
-  String realtime_cpu_usage(Object usage) {
+  /// `Cpu Usage:{usage}%`
+  String cpu_page_title(Object usage) {
     return Intl.message(
-      'current usage:$usage%',
-      name: 'realtime_cpu_usage',
+      'Cpu Usage:$usage%',
+      name: 'cpu_page_title',
       desc: '',
       args: [usage],
     );
