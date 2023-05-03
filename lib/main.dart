@@ -1,6 +1,7 @@
 import 'package:android_monitor_tool/cpu/cpu_info_page.dart';
 import 'package:android_monitor_tool/generated/l10n.dart';
 import 'package:android_monitor_tool/mem/mem_info_page.dart';
+import 'package:android_monitor_tool/network/network_info_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -28,6 +29,7 @@ class MyApp extends StatelessWidget {
         // print('当前系统语言环境$locales');
         return;
       },
+      themeMode: ThemeMode.dark,
       theme: MacosThemeData.light(),
       darkTheme: MacosThemeData.dark(),
       home: const MyHomePage(),
@@ -65,15 +67,20 @@ class _MyHomePageState extends State<MyHomePage> {
                 leading: const MacosIcon(CupertinoIcons.graph_circle),
                 label: Text(S.current.sidebar_name_cpu),
               ),
+              SidebarItem(
+                leading: const MacosIcon(CupertinoIcons.antenna_radiowaves_left_right),
+                label: Text('Network'),
+              ),
             ],
           );
         },
       ),
       child: IndexedStack(
         index: _pageIndex,
-        children: const [
+        children:  [
           MemInfoPage(),
           CpuInfoPage(),
+          NetworkInfoPage(),
         ],
       ),
     );

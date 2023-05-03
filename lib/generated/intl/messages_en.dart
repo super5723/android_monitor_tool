@@ -26,7 +26,9 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m2(file) => "export success:${file}";
 
-  static String m3(process) => "Process:${process}";
+  static String m3(address) => "http log server connected:${address}";
+
+  static String m4(process) => "Process:${process}";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -45,16 +47,25 @@ class MessageLookup extends MessageLookupByLibrary {
             "input interval,must greater than 1000"),
         "hint_input_process_name":
             MessageLookupByLibrary.simpleMessage("input process name"),
+        "http_log_server_connected": m3,
+        "http_log_server_disconnected": MessageLookupByLibrary.simpleMessage(
+            "http log server disconnected"),
         "import": MessageLookupByLibrary.simpleMessage("Import"),
+        "input_http_log_filter_keyword":
+            MessageLookupByLibrary.simpleMessage("input filter keyword"),
+        "input_http_log_server_host":
+            MessageLookupByLibrary.simpleMessage("input server ip"),
         "input_interval_not_valid": MessageLookupByLibrary.simpleMessage(
             "interval not valid,must greater than 1000"),
-        "memory_page_title_common": m3,
+        "memory_page_title_common": m4,
         "memory_page_title_default": MessageLookupByLibrary.simpleMessage(
             "please input processName by setting"),
         "select_export_path":
             MessageLookupByLibrary.simpleMessage("Select path"),
         "select_import_file":
             MessageLookupByLibrary.simpleMessage("Select file"),
+        "set_clipboard_success":
+            MessageLookupByLibrary.simpleMessage("copied to clipboard"),
         "set_command_interval":
             MessageLookupByLibrary.simpleMessage("Shell interval"),
         "set_process_name": MessageLookupByLibrary.simpleMessage("set Process"),

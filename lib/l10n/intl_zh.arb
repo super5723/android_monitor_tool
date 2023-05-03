@@ -27,5 +27,10 @@
   "success": "成功",
   "clear":"清空数据",
   "cpu_page_title_default": "Cpu使用率",
-  "cpu_page_title": "Cpu使用率:{usage}%"
+  "cpu_page_title": "Cpu使用率:{usage}%",
+  "http_log_server_disconnected": "http日志服务未连接",
+  "http_log_server_connected": "http日志服务已连接:{address}",
+  "input_http_log_filter_keyword": "输入过滤关键字",
+  "input_http_log_server_host": "输入日志服务IP",
+  "set_clipboard_success": "已保存到剪贴板"
 }

@@ -27,5 +27,10 @@
   "success": "success",
   "clear":"clear data",
   "cpu_page_title_default": "Cpu Usage",
-  "cpu_page_title": "Cpu Usage:{usage}%"
+  "cpu_page_title": "Cpu Usage:{usage}%",
+  "http_log_server_disconnected": "http log server disconnected",
+  "http_log_server_connected": "http log server connected:{address}",
+  "input_http_log_filter_keyword": "input filter keyword",
+  "input_http_log_server_host": "input server ip",
+  "set_clipboard_success": "copied to clipboard"
 }

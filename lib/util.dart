@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:android_monitor_tool/common_dialog.dart';
 import 'package:android_monitor_tool/cpu/cpu_info.dart';
 import 'package:android_monitor_tool/generated/l10n.dart';
 import 'package:android_monitor_tool/mem/mem_chart_model.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_json_view/flutter_json_view.dart';
 import 'package:macos_ui/macos_ui.dart';
 import 'cpu/cpu_chart_model.dart';
 import 'mem/mem_info.dart';
@@ -24,6 +27,11 @@ class Util {
     if (value is int) return value;
     if (value is double) return value.toInt();
     return defaultValue;
+  }
+
+  static String parseSafeStr(dynamic value) {
+    if (value == null) return "";
+    return '$value';
   }
 
   ///y轴以GB为单位
@@ -218,4 +226,25 @@ class Util {
           );
         });
   }
+
+  static showJsonViewDialog(
+      {required BuildContext context,
+        required String json}) async {
+    await showDialog(
+        context: context,
+        builder: (_) {
+          return CommonDialog(
+            content: Builder(
+              builder: (_) {
+                return SizedBox(
+                  width: 800,
+                  height: 600,
+                  child: JsonView.string(json),
+                );
+              },
+            ),
+          );
+        });
+  }
+
 }

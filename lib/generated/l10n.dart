@@ -329,6 +329,56 @@ class S {
       args: [usage],
     );
   }
+
+  /// `http log server disconnected`
+  String get http_log_server_disconnected {
+    return Intl.message(
+      'http log server disconnected',
+      name: 'http_log_server_disconnected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `http log server connected:{address}`
+  String http_log_server_connected(Object address) {
+    return Intl.message(
+      'http log server connected:$address',
+      name: 'http_log_server_connected',
+      desc: '',
+      args: [address],
+    );
+  }
+
+  /// `input filter keyword`
+  String get input_http_log_filter_keyword {
+    return Intl.message(
+      'input filter keyword',
+      name: 'input_http_log_filter_keyword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `input server ip`
+  String get input_http_log_server_host {
+    return Intl.message(
+      'input server ip',
+      name: 'input_http_log_server_host',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `copied to clipboard`
+  String get set_clipboard_success {
+    return Intl.message(
+      'copied to clipboard',
+      name: 'set_clipboard_success',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
